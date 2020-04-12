@@ -1,11 +1,13 @@
 
 window.onload = () => {
-  displayStores()
+  
+  
 }
 
 let map; 
 let markers = [];
 let infoWindow;
+
 
 function initMap() {
     var losAngeles = {
@@ -19,17 +21,33 @@ function initMap() {
       mapTypeId: 'roadmap'
     });
     infoWindow = new google.maps.InfoWindow();
-    showStoresMarkers()
+    google.maps.event.trigger(markers[0], 'click');
+    
+    searchStores();
+    // setOnClickListener();
   }
 
 
-displayStores = () => {
+function setOnClickListener(){
+  let storeElements = document.querySelectorAll(".store-container");
+  storeElements.forEach((elem,index) => {
+    elem.addEventListener("click", function(){
+      new google.maps.event.trigger(markers[index], 'click');
+    })
+    
+  })
+
+}
+
+
+displayStores = (stores) => {
   let storesHtml = '';
   stores.map((store,i) => {
     let address = store["addressLines"];
     let phone = store["phoneNumber"];
     storesHtml += `
       <div class="store-container">
+      <div class="store-container-background">
         <div class="store-info-container">
           <div class="store-address">
             <span>${address[0]}</span>
@@ -45,13 +63,15 @@ displayStores = () => {
           </div>
         </div>
       </div>
+        
+      </div>
     `
     document.querySelector(".stores-list").innerHTML = storesHtml;
   });
 }
 
 
-function showStoresMarkers(){
+function showStoresMarkers(stores){
   let bounds = new google.maps.LatLngBounds();
   stores.map((store,index) => {
     let name = store["name"];
@@ -103,3 +123,34 @@ function createMarker(latlng, name, address, openStatusText, phoneNumber,index){
   });
   markers.push(marker);
 }
+
+// function clearLocations() {
+//   infoWindow.close();
+//   for (var i = 0; i < markers.length; i++) {
+//     markers[i].setMap(null);
+//   }
+//   markers.length = 0;
+
+// }
+
+function searchStores() {
+  let foundStores = []
+  let zipCode = document.getElementById('zip-code-input').value;
+  if (zipCode){
+    for (var store of stores){
+      var postal = store["address"]["postalCode"].substring(0,5);
+      
+      if(postal === zipCode){
+        foundStores.push(store);
+      }
+    }
+
+  } else {
+    foundStores = stores;
+  }      
+  // clearLocations();
+  displayStores(foundStores);
+  showStoresMarkers(foundStores);
+  setOnClickListener();
+}
+

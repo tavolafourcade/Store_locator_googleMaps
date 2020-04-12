@@ -85,6 +85,7 @@ body {
 .store-container {
     display: flex;
     border-bottom: 1px solid #979797;
+    cursor: pointer;
 }
 
 .store-info-container {
@@ -163,4 +164,27 @@ body {
     justify-content: center;
     border-radius: 50%;
     margin-right: 8px;
+}
+
+.search i {
+    cursor: pointer;
+}
+
+.store-container-background {
+    display: flex;
+    flex-grow: 1;
+    margin: 8px;
+    border-radius: 18px;
+    padding-left: 8px;
+    padding-right: 8px;
+    margin-bottom: 12px;
+    margin-top: 12px;
+    transition: all 0.2s ease-in-out;
+}
+
+
+.store-container-background:hover {
+
+    background-color: #ccc;
+
 }
